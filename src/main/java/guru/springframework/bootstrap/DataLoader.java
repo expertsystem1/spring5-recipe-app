@@ -1,11 +1,9 @@
-package guru.springframework;
-
+package guru.springframework.bootstrap;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Component;
 
 import guru.springframework.model.Category;
 import guru.springframework.model.Difficulty;
@@ -18,8 +16,8 @@ import guru.springframework.repositories.MeasureUnitRepository;
 import guru.springframework.repositories.NoteRepository;
 import guru.springframework.repositories.RecipeRepository;
 
-@SpringBootApplication
-public class Spring5RecipeAppApplication {
+@Component
+public class DataLoader {
 
 	private RecipeRepository recipeRepository;
 	private IngredientRepository ingredientsRepository;
@@ -27,9 +25,7 @@ public class Spring5RecipeAppApplication {
 	private NoteRepository noteRepository;
 	private MeasureUnitRepository unitRepository;
 
-
-
-	public Spring5RecipeAppApplication(RecipeRepository recipeRepository, IngredientRepository ingredientsRepository,
+	public DataLoader(RecipeRepository recipeRepository, IngredientRepository ingredientsRepository,
 			CategoryRepository categoryRepository, NoteRepository noteRepository,
 			MeasureUnitRepository unitRepository) {
 		this.recipeRepository = recipeRepository;
@@ -37,13 +33,11 @@ public class Spring5RecipeAppApplication {
 		this.categoryRepository = categoryRepository;
 		this.noteRepository = noteRepository;
 		this.unitRepository = unitRepository;
-	}
-
-	public static void main(String[] args) {
-		SpringApplication.run(Spring5RecipeAppApplication.class, args);
+		loadData();
 	}
 
 	private void loadData() {
+		System.out.println("Load Recipe");
 		Recipe recipe = new Recipe();
 		recipe.setDescription("Guacamole");
 		Set<Category> categories = loadCategories();
@@ -57,26 +51,33 @@ public class Spring5RecipeAppApplication {
 		recipe.setPretTime(15);
 		recipe.setServings(4);
 		recipe.setSource("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
+		
 		recipe.getCategories().forEach(category -> {
 			category.addRecipe(recipe); 
 			categoryRepository.save(category);
 		});
+		
+		recipeRepository.save(recipe);
+		
 		recipe.getIngredients().forEach(ingredient -> {
 			ingredient.setRecipe(recipe);
 			ingredientsRepository.save(ingredient);
 		});
+		
 		note.setRecipe(recipe);
 		noteRepository.save(note);
-		recipeRepository.save(recipe);
+		
 	}
 
 	private Note loadNote() {
+		System.out.println(">>> Load Note");
 		Note note = new Note();
 		note.setRecipeNote("It is fine with chilly, meat and fish dishes");
 		return note;
 	}
 
 	private Set<Category> loadCategories(){
+		System.out.println(">>> Load Categories");
 		Set<Category> categories = new HashSet<Category>();
 
 		Category sauceCategory = new Category();
@@ -91,6 +92,7 @@ public class Spring5RecipeAppApplication {
 	}
 
 	private Set<Ingredient> loadIngredients(){
+		System.out.println(">>> Load Ingredients");
 		Set<Ingredient> ingredients = new HashSet<Ingredient>();
 
 		Ingredient avocado = new Ingredient();
@@ -98,6 +100,7 @@ public class Spring5RecipeAppApplication {
 		avocado.setDescription("ripe avocado");
 		avocado.setUnitOfMeausure(unitRepository.findByDescription("Unit").get());
 		ingredients.add(avocado);
+		
 
 		Ingredient salt = new Ingredient();
 		salt.setAmount(new BigDecimal(1/4));
