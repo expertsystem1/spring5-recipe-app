@@ -30,6 +30,4 @@ public class MeasureUnit {
 		this.description = description;
 	}
 	
-	
-        
 }
