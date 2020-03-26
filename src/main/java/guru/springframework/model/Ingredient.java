@@ -3,10 +3,12 @@ package guru.springframework.model;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Ingredient {
@@ -17,6 +19,9 @@ public class Ingredient {
 	
 	private String description;
 	private BigDecimal amount;
+	
+	@OneToOne (fetch = FetchType.EAGER)
+	private MeasureUnit unitOfMeausure;
 	
 	@ManyToOne
 	private Recipe recipe;
@@ -45,5 +50,11 @@ public class Ingredient {
 	public void setRecipe(Recipe recipe) {
 		this.recipe = recipe;
 	}
-
+	public MeasureUnit getUnitOfMeausure() {
+		return unitOfMeausure;
+	}
+	public void setUnitOfMeausure(MeasureUnit unitOfMeausure) {
+		this.unitOfMeausure = unitOfMeausure;
+	}
+	
 }
