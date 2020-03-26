@@ -25,11 +25,12 @@ public class Recipe {
 	private Long id;
 
 	private String description;
-	private Integer pretTime;
+	private Integer prepTime;
 	private Integer cookTime;
 	private Integer servings;
 	private String source;
 	private String url;
+	@Lob
 	private String directions;
 
 
@@ -40,7 +41,7 @@ public class Recipe {
 	private Note note;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy ="recipe")
-	private Set<Ingredient> ingredients;
+	private Set<Ingredient> ingredients = new HashSet<Ingredient>();
 
 	@Enumerated(value = EnumType.STRING)
 	private Difficulty difficulty;
@@ -51,7 +52,7 @@ public class Recipe {
 			joinColumns = @JoinColumn(name="recipe_id"), 
 			inverseJoinColumns = @JoinColumn(name="category_id")
     )
-	private Set<Category> categories;
+	private Set<Category> categories = new HashSet<Category>();
 
 	public Long getId() {
 		return id;
@@ -69,12 +70,12 @@ public class Recipe {
 		this.description = description;
 	}
 
-	public Integer getPretTime() {
-		return pretTime;
+	public Integer getPrepTime() {
+		return prepTime;
 	}
 
-	public void setPretTime(Integer pretTime) {
-		this.pretTime = pretTime;
+	public void setPrepTime(Integer prepTime) {
+		this.prepTime = prepTime;
 	}
 
 	public Integer getCookTime() {

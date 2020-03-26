@@ -10,3 +10,5 @@ INSERT INTO measure_unit (description) VALUES ('Ounce');
 INSERT INTO measure_unit (description) VALUES ('Dash');
 INSERT INTO measure_unit (description) VALUES ('Unit');
 INSERT INTO measure_unit (description) VALUES ('Bag');
+INSERT INTO measure_unit (description) VALUES ('Each');
+INSERT INTO measure_unit (description) VALUES ('Pint');
