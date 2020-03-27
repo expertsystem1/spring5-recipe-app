@@ -1,18 +1,26 @@
 package guru.springframework.bootstrap;
 
-import guru.springframework.model.*;
-import guru.springframework.repositories.CategoryRepository;
-import guru.springframework.repositories.MeasureUnitRepository;
-import guru.springframework.repositories.RecipeRepository;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
+
+import guru.springframework.model.Category;
+import guru.springframework.model.Difficulty;
+import guru.springframework.model.Ingredient;
+import guru.springframework.model.MeasureUnit;
+import guru.springframework.model.Note;
+import guru.springframework.model.Recipe;
+import guru.springframework.repositories.CategoryRepository;
+import guru.springframework.repositories.MeasureUnitRepository;
+import guru.springframework.repositories.RecipeRepository;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -29,6 +37,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         recipeRepository.saveAll(getRecipes());
+        log.debug("Loading bootstrap data");
     }
 
     private List<Recipe> getRecipes() {
@@ -164,7 +173,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         Note tacoNotes = new Note();
         tacoNotes.setRecipeNote("We have a family motto and it is this: Everything goes better in a tortilla.\n" +
                 "Any and every kind of leftover can go inside a warm tortilla, usually with a healthy dose of pickled jalapenos. I can always sniff out a late-night snacker when the aroma of tortillas heating in a hot pan on the stove comes wafting through the house.\n" +
-                "Today’s tacos are more purposeful – a deliberate meal instead of a secretive midnight snack!\n" +
+                "Today's tacos are more purposeful - a deliberate meal instead of a secretive midnight snack!\n" +
                 "First, I marinate the chicken briefly in a spicy paste of ancho chile powder, oregano, cumin, and sweet orange juice while the grill is heating. You can also use this time to prepare the taco toppings.\n" +
                 "Grill the chicken, then let it rest while you warm the tortillas. Now you are ready to assemble the tacos and dig in. The whole meal comes together in about 30 minutes!\n" +
                 "\n" +
