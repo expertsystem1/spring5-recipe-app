@@ -6,9 +6,10 @@ import guru.springframework.commands.IngredientCommand;
 import guru.springframework.model.Ingredient;
 
 public interface IngredientService {
-    Set<Ingredient> findAll();
+    IngredientCommand findIngredientsByRecipeId(Long recipeId, Long ingredientId);
+    /*Set<Ingredient> findAll();
     Ingredient findById(long id);
     IngredientCommand saveCommand(IngredientCommand command);
     IngredientCommand findCommandById(Long id);
-    void deleteById(Long id);
+    void deleteById(Long id);*/
 }

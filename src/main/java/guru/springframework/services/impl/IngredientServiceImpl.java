@@ -1,10 +1,8 @@
 package guru.springframework.services.impl;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withUnauthorizedRequest;
 
-import javax.transaction.Transactional;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -12,7 +10,9 @@ import guru.springframework.commands.IngredientCommand;
 import guru.springframework.converters.IngredientCommandToIngredient;
 import guru.springframework.converters.IngredientToIngredientCommand;
 import guru.springframework.model.Ingredient;
+import guru.springframework.model.Recipe;
 import guru.springframework.repositories.IngredientRepository;
+import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.services.IngredientService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,18 +20,39 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class IngredientServiceImpl implements IngredientService{
 	
-	private final IngredientRepository repository;
+
+	private final RecipeRepository recipeRepository;
     private final IngredientToIngredientCommand toCommandConverter;
     private final IngredientCommandToIngredient fromCommandConverter;
     
-    public IngredientServiceImpl(IngredientRepository repository, IngredientToIngredientCommand toCommandConverter,
+    
+    public IngredientServiceImpl(RecipeRepository recipeRepository, IngredientToIngredientCommand toCommandConverter,
 			IngredientCommandToIngredient fromCommandConverter) {
-		this.repository = repository;
+		this.recipeRepository = recipeRepository;
 		this.toCommandConverter = toCommandConverter;
 		this.fromCommandConverter = fromCommandConverter;
 	}
 
+
 	@Override
+	public IngredientCommand findIngredientsByRecipeId(Long recipeId, Long ingredientId) {
+		Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
+		if(!optionalRecipe.isPresent()) {
+			throw new RuntimeException("Recipe id not found!!!");
+		}
+		Recipe recipe = optionalRecipe.get();
+		Optional<IngredientCommand> ingredientCommandOptional = recipe.getIngredients().stream()
+				.filter(ingredient -> ingredient.getId().equals(ingredientId))
+				.map(ingredient -> toCommandConverter.convert(ingredient)).findFirst();
+		if(!ingredientCommandOptional.isPresent()) {
+			throw new RuntimeException("Ingredient id not found!!!");
+		}
+		return ingredientCommandOptional.get();
+	}
+    
+    
+
+	/*@Override
 	public Set<Ingredient> findAll() {
         Set<Ingredient> items = new HashSet<Ingredient>();
         repository.findAll().iterator().forEachRemaining(items::add);
@@ -69,6 +90,6 @@ public class IngredientServiceImpl implements IngredientService{
 	@Override
 	public void deleteById(Long id) {
 		repository.deleteById(id);
-	}
+	}*/
 
 }
