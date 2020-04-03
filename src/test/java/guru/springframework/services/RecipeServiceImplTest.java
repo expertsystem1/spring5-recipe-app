@@ -11,6 +11,7 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import guru.springframework.converters.RecipeCommandToRecipe;
@@ -45,6 +46,13 @@ public class RecipeServiceImplTest {
 		assertEquals(recipes.size(), 1);
 		//verify that find all is called 1
 		verify(recipeRepository,times(1)).findAll();
+	}
+	
+	@Test
+	public void testDeleteById() throws Exception {
+		Long id = Long.valueOf(2L);
+		recipeService.deleteById(id);
+		verify(recipeRepository, times(1)).deleteById(Mockito.anyLong());
 	}
 
 }
