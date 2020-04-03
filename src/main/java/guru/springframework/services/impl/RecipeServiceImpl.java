@@ -1,4 +1,4 @@
-package guru.springframework.services;
+package guru.springframework.services.impl;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -13,6 +13,7 @@ import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.model.Recipe;
 import guru.springframework.repositories.RecipeRepository;
+import guru.springframework.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -31,14 +32,14 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-    public Set<Recipe> getRecipes() {
+    public Set<Recipe> findAll() {
         Set<Recipe> recipeSet = new HashSet<>();
         recipeRepository.findAll().iterator().forEachRemaining(recipeSet::add);
         return recipeSet;
     }
 
 	@Override
-	public Recipe getRecipeById(long id) {
+	public Recipe findById(long id) {
 	    Optional<Recipe> recipeOptional = recipeRepository.findById(id);
 	    if(!recipeOptional.isPresent()) {
 	    	throw new RuntimeException("Recipe Not Found!!!");
@@ -48,7 +49,7 @@ public class RecipeServiceImpl implements RecipeService {
 
 	@Override
 	@Transactional
-	public RecipeCommand saveRecipeCommand(RecipeCommand command) {
+	public RecipeCommand saveCommand(RecipeCommand command) {
 		Recipe detachRecipe = recipeCommandToRecipe.convert(command);
 		Recipe savedRecipe = recipeRepository.save(detachRecipe);
 		log.debug("Saved RecipeId: "+savedRecipe.getId());
@@ -60,7 +61,7 @@ public class RecipeServiceImpl implements RecipeService {
 	public RecipeCommand findCommandById(Long id) {
 		Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
 		if (!optionalRecipe.isPresent()) {
-			throw new RuntimeException("Recipe non found!!!");
+			throw new RuntimeException("Recipe not found!!!");
 		}
 		return recipeToRecipeCommand.convert(optionalRecipe.get());
 	}

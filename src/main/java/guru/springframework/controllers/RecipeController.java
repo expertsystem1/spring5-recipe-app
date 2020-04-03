@@ -8,58 +8,58 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.services.RecipeService;
+import guru.springframework.services.helper.RecipeConfigurationHelper;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Controller
 @RequestMapping("/recipes")
 public class RecipeController {
 	
 	private final RecipeService service;
+    private final RecipeConfigurationHelper conf;
 
-	public RecipeController(RecipeService service) {
+	public RecipeController(RecipeService service, RecipeConfigurationHelper conf) {
 		this.service = service;
+		this.conf = conf;
 	}
 	
 	@RequestMapping({"/","","index","index.html"})
-	public String getRecipeList(Model model) {
-		log.debug("Recipes list request");
-		model.addAttribute("recipes",service.getRecipes());
-		return "recipes/index";
+	public String getList(Model model) {
+		model.addAttribute(conf.MODEL_ATTRIBUTE_ITEM_LIST,service.findAll());
+		return conf.getView(conf.INDEX_PAGE,false);
 	}
 	
 	@RequestMapping("/{id}/show")
-	public String showRecipeById(@PathVariable String id, Model model) {
-		model.addAttribute("recipe",service.getRecipeById(new Long(id)));
-		return "recipes/show";
+	public String showItemById(@PathVariable String id, Model model) {
+		model.addAttribute(conf.MODEL_ATTRIBUTE_SINGLE_ITEM,service.findById(new Long(id)));
+		return conf.getView(conf.SHOW,false);
 	}
 	
 	@RequestMapping("/{id}/update")
-	public String updateRecipe(@PathVariable String id, Model model) {
-		model.addAttribute("recipe",service.findCommandById(new Long(id)));
-		return "recipes/recipeform";
+	public String updateItem(@PathVariable String id, Model model) {
+		model.addAttribute(conf.MODEL_ATTRIBUTE_SINGLE_ITEM,service.findCommandById(new Long(id)));
+		return conf.getView(conf.FORM_NAME,false);
 	}
 	
 	@RequestMapping("/{id}/delete")
-	public String deleteRecipe(@PathVariable String id, Model model) {
+	public String deleteItem(@PathVariable String id, Model model) {
 		service.deleteById(new Long(id));
-		return "redirect:/recipes/";
+		return conf.getView("", true);
 	}
 	
 	@RequestMapping("/new")
-	public String newRecipe(Model model) {
-		model.addAttribute("recipe", new RecipeCommand());
-		return "recipes/recipeform";
+	public String newItem(Model model) {
+		model.addAttribute(conf.MODEL_ATTRIBUTE_SINGLE_ITEM, new IngredientCommand());
+		return conf.getView(conf.FORM_NAME,false);
 	}
 	
 	@PostMapping({"/",""})
 	public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
-		RecipeCommand savedCommand = service.saveRecipeCommand(command);
-		return "redirect:/recipes/"+savedCommand.getId()+"/show/";
+		RecipeCommand savedCommand = service.saveCommand(command);
+		return conf.getView(savedCommand.getId()+"/"+conf.SHOW+"/", true);
 	}
-	
-
 		
 }

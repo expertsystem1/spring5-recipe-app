@@ -6,9 +6,9 @@ import guru.springframework.model.Recipe;
 import java.util.Set;
 
 public interface RecipeService {
-    Set<Recipe> getRecipes();
-    Recipe getRecipeById(long id);
-    RecipeCommand saveRecipeCommand(RecipeCommand command);
+    Set<Recipe> findAll();
+    Recipe findById(long id);
+    RecipeCommand saveCommand(RecipeCommand command);
     RecipeCommand findCommandById(Long id);
     void deleteById(Long id);
 }

@@ -18,6 +18,7 @@ import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.model.Recipe;
 import guru.springframework.repositories.RecipeRepository;
+import guru.springframework.services.impl.RecipeServiceImpl;
 
 public class RecipeServiceImplTest {
 	
@@ -41,8 +42,8 @@ public class RecipeServiceImplTest {
 		Recipe recipe = new Recipe();
 	    Set<Recipe> recipesData = new HashSet<Recipe>();
 	    recipesData.add(recipe);
-	    when(recipeService.getRecipes()).thenReturn(recipesData);
-		Set<Recipe> recipes = recipeService.getRecipes();
+	    when(recipeService.findAll()).thenReturn(recipesData);
+		Set<Recipe> recipes = recipeService.findAll();
 		assertEquals(recipes.size(), 1);
 		//verify that find all is called 1
 		verify(recipeRepository,times(1)).findAll();
