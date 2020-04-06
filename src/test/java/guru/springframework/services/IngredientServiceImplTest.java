@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import guru.springframework.commands.IngredientCommand;
@@ -20,6 +21,7 @@ import guru.springframework.converters.UoMCommnandToUoM;
 import guru.springframework.converters.UoMToUoMCommand;
 import guru.springframework.model.Ingredient;
 import guru.springframework.model.Recipe;
+import guru.springframework.repositories.MeasureUnitRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.services.impl.IngredientServiceImpl;
 
@@ -30,6 +32,9 @@ public class IngredientServiceImplTest {
 
     @Mock
     RecipeRepository recipeRepository;
+    
+    @Mock
+    MeasureUnitRepository uomRepository;
 
     IngredientService ingredientService;
 
@@ -42,7 +47,7 @@ public class IngredientServiceImplTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        ingredientService = new IngredientServiceImpl(recipeRepository,ingredientToIngredientCommand,ingredientCommandToIngredient);
+        ingredientService = new IngredientServiceImpl(recipeRepository,ingredientToIngredientCommand,ingredientCommandToIngredient, uomRepository);
     }
 
     @Test
@@ -79,6 +84,28 @@ public class IngredientServiceImplTest {
         assertEquals(Long.valueOf(3L), ingredientCommand.getId());
         assertEquals(Long.valueOf(1L), ingredientCommand.getRecipeId());
         verify(recipeRepository, times(1)).findById(anyLong());
+    }
+    
+    @Test
+    public void testSaveIngredient() {
+    	IngredientCommand command = new IngredientCommand();
+    	command.setId(3L);
+    	command.setRecipeId(2L);
+    	
+    	Optional<Recipe> recipeOptional = Optional.of(new Recipe());
+    	Recipe savedRecipe = new Recipe();
+    	savedRecipe.addIngredient(new Ingredient());
+    	savedRecipe.getIngredients().iterator().next().setId(3L);
+    	
+    	when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+    	when(recipeRepository.save(Mockito.any())).thenReturn(savedRecipe);
+    	
+    	IngredientCommand savedCommand = ingredientService.saveCommand(command);
+    	assertEquals(Long.valueOf(3L), savedCommand.getId());
+    	verify(recipeRepository,times(1)).findById(anyLong());
+    	verify(recipeRepository,times(1)).save(Mockito.any());
+    	
+    	
     }
 
 }

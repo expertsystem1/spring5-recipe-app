@@ -1,7 +1,5 @@
 package guru.springframework.services.impl;
 
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withUnauthorizedRequest;
-
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -11,7 +9,7 @@ import guru.springframework.converters.IngredientCommandToIngredient;
 import guru.springframework.converters.IngredientToIngredientCommand;
 import guru.springframework.model.Ingredient;
 import guru.springframework.model.Recipe;
-import guru.springframework.repositories.IngredientRepository;
+import guru.springframework.repositories.MeasureUnitRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.services.IngredientService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,18 +17,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class IngredientServiceImpl implements IngredientService{
-	
+
 
 	private final RecipeRepository recipeRepository;
-    private final IngredientToIngredientCommand toCommandConverter;
-    private final IngredientCommandToIngredient fromCommandConverter;
-    
-    
-    public IngredientServiceImpl(RecipeRepository recipeRepository, IngredientToIngredientCommand toCommandConverter,
-			IngredientCommandToIngredient fromCommandConverter) {
+	private final IngredientToIngredientCommand toCommandConverter;
+	private final IngredientCommandToIngredient fromCommandConverter;
+	private final MeasureUnitRepository unitOfMeasureRepository;
+
+	public IngredientServiceImpl(RecipeRepository recipeRepository, IngredientToIngredientCommand toCommandConverter,
+			IngredientCommandToIngredient fromCommandConverter, MeasureUnitRepository unitOfMeasureRepository) {
 		this.recipeRepository = recipeRepository;
 		this.toCommandConverter = toCommandConverter;
 		this.fromCommandConverter = fromCommandConverter;
+		this.unitOfMeasureRepository = unitOfMeasureRepository;
 	}
 
 
@@ -49,8 +48,38 @@ public class IngredientServiceImpl implements IngredientService{
 		}
 		return ingredientCommandOptional.get();
 	}
-    
-    
+
+
+	@Override
+	public IngredientCommand saveCommand(IngredientCommand command) {
+		Long recipeId = command.getRecipeId();
+		Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
+		if (!optionalRecipe.isPresent()) {
+			log.debug("Recipe ID not found!");
+			return new IngredientCommand();
+		}
+		Recipe recipe = optionalRecipe.get();
+		Long ingredientId = command.getId();
+		Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
+				.filter(ingredient -> ingredient.getId().equals(ingredientId)).findFirst();
+		if(!ingredientOptional.isPresent()) {
+			recipe.addIngredient(fromCommandConverter.convert(command));
+		}else {
+			Ingredient ingredientFound = ingredientOptional.get();
+			ingredientFound.setDescription(command.getDescription());
+			ingredientFound.setAmount(command.getAmount());
+			ingredientFound.setUnitOfMeasure(unitOfMeasureRepository
+					.findById(command.getUnitOfMeasure().getId())
+					.orElseThrow(() -> new RuntimeException("UOM NOT FOUND"))); 
+		}
+		Recipe savedRecipe = recipeRepository.save(recipe);
+		return toCommandConverter.convert(savedRecipe.getIngredients().stream()
+				.filter(recipeIngredients -> recipeIngredients.getId().equals(command.getId()))
+				.findFirst()
+				.get());
+	}
+
+
 
 	/*@Override
 	public Set<Ingredient> findAll() {
