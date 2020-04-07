@@ -34,22 +34,20 @@ public class IngredientController {
 		this.uomService = uomService;
 	}
 
-	@GetMapping
-	@RequestMapping("/recipes/{recipeId}/ingredients")
+	@GetMapping("/recipes/{recipeId}/ingredients")
 	public String getList(@PathVariable String recipeId, Model model) {
 		model.addAttribute(conf.MODEL_ATTRIBUTE_SINGLE_RECIPE, recipeService.findCommandById(Long.valueOf(recipeId)));
 		return conf.getView(conf.INDEX_PAGE,false);
 	}
 
-	@GetMapping
-	@RequestMapping("/recipes/{recipeId}/ingredients/{id}/show")
+	@GetMapping("/recipes/{recipeId}/ingredients/{id}/show")
 	public String getRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
 		model.addAttribute(conf.MODEL_ATTRIBUTE_SINGLE_ITEM,ingredientService.findIngredientsByRecipeId(new Long(recipeId), new Long(id)));
 		return conf.getView(conf.SHOW, false);
 	}
 
-	@GetMapping
-	@RequestMapping("recipes/{recipeId}/ingredients/{id}/update")
+
+	@GetMapping("recipes/{recipeId}/ingredients/{id}/update")
 	public String updateRecipeIngredient(@PathVariable String recipeId,
 			@PathVariable String id, Model model){
 		model.addAttribute("ingredient", ingredientService.findIngredientsByRecipeId(Long.valueOf(recipeId), Long.valueOf(id)));
@@ -57,8 +55,7 @@ public class IngredientController {
 		return conf.BASE_PATH+conf.FORM_NAME;
 	}
 
-	@PostMapping
-	@RequestMapping("recipes/{recipeId}/ingredient")
+	@PostMapping("recipes/{recipeId}/ingredient")
 	public String saveOrUpdate(@ModelAttribute IngredientCommand command) {
 		IngredientCommand savedCommand = ingredientService.saveCommand(command);
 		Map<String,String> parameters = new HashMap<String, String>();
@@ -67,8 +64,7 @@ public class IngredientController {
 		return conf.getDynamicView(conf.PATH_RECIPE_INGREDIENT_SHOW, parameters, true);
 	}
 
-	@GetMapping
-	@RequestMapping("recipes/{recipeId}/ingredients/new")
+	@GetMapping("recipes/{recipeId}/ingredients/new")
 	public String addIngredient(@PathVariable String recipeId, Model model) {
 		RecipeCommand recipeCommand = recipeService.findCommandById(new Long(recipeId));
 		if (recipeCommand == null) 
@@ -82,8 +78,7 @@ public class IngredientController {
 		return returnUrl;
 	}
 	
-	@GetMapping
-	@RequestMapping("recipes/{recipeId}/ingredients/{id}/delete")
+	@GetMapping("recipes/{recipeId}/ingredients/{id}/delete")
 	public String deleteIngredient(@PathVariable String recipeId, @PathVariable String id) {
 		ingredientService.deleteById(new Long(recipeId), new Long(id));
 		Map<String,String> parameters = new HashMap<String, String>();

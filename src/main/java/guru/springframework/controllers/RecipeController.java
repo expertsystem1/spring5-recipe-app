@@ -6,13 +6,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.services.RecipeService;
 import guru.springframework.services.helper.RecipeConfigurationHelper;
-import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/recipes")
@@ -52,7 +49,7 @@ public class RecipeController {
 	
 	@RequestMapping("/new")
 	public String newItem(Model model) {
-		model.addAttribute(conf.MODEL_ATTRIBUTE_SINGLE_ITEM, new IngredientCommand());
+		model.addAttribute(conf.MODEL_ATTRIBUTE_SINGLE_ITEM, new RecipeCommand());
 		return conf.getView(conf.FORM_NAME,false);
 	}
 	
