@@ -22,6 +22,8 @@ public class ServiceCofigurationHelper {
 		}
 		if(isRedirect)
 			path = getRedirectPrefix(path);
+		else
+			path = addMissingSlash(path); 
 		return path;
 	}
 
@@ -32,6 +34,13 @@ public class ServiceCofigurationHelper {
 			return path;
 		}
 		return "";
+	}
+	
+	private String addMissingSlash(String path) {
+		if (!path.startsWith("/")) {
+			path = "/"+path; 
+		}
+		return path;
 	}
 
 }

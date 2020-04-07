@@ -44,7 +44,17 @@
 											th:text="${category.getDescription()}">cat three</li>
 									</ul>
 								</div>
+								<div class="col-md-6">
+									<img src="../../static/images/guacamole.jpg"
+										th:src="@{/images/guacamole.jpg}" width="100" />
+								</div>
+								<div class="col-md-1">
+									<a class="btn btn-default" href="#"
+										th:href="@{'/recipes/' + ${recipe.id} + '/image'}"
+										role="button">Change Image</a>
+								</div>
 							</div>
+
 							<div class="row">
 								<div class="col-md-3">
 									<h5>Prep Time:</h5>
