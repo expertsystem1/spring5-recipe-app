@@ -26,7 +26,8 @@ public class IngredientConfiguratinHelper extends ServiceCofigurationHelper{
 	public final String PATH_RECIPE_INGREDIENT_POST = "/recipes/"+RECIPE_ID+"/ingredient";
 	public final String PATH_RECIPE_INGREDIENT_SHOW = "/recipes/"+RECIPE_ID+"/ingredients/"+INGREDIENT_ID+"/show";
 	public final String PATH_RECIPE_INGREDIENT_UPDATE = "/recipes/"+RECIPE_ID+"/ingredients/"+INGREDIENT_ID+"/update";
-		
+	public final String PATH_RECIPE_INGREDIENT_DELETE = "/recipes/"+RECIPE_ID+"/ingredients/"+INGREDIENT_ID+"/delete";
+	
 	@Override
 	public String getBasePath() {
 		return this.BASE_PATH;

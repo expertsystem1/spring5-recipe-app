@@ -81,6 +81,15 @@ public class IngredientController {
 		String returnUrl = conf.BASE_PATH+conf.FORM_NAME; 
 		return returnUrl;
 	}
+	
+	@GetMapping
+	@RequestMapping("recipes/{recipeId}/ingredients/{id}/delete")
+	public String deleteIngredient(@PathVariable String recipeId, @PathVariable String id) {
+		ingredientService.deleteById(new Long(recipeId), new Long(id));
+		Map<String,String> parameters = new HashMap<String, String>();
+		parameters.put(conf.RECIPE_ID, recipeId);
+		return conf.getDynamicView(conf.PATH_RECIPE_INGREDIENTS, parameters, true);
+	}
 
 
 }

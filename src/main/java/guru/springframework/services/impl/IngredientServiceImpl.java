@@ -89,45 +89,15 @@ public class IngredientServiceImpl implements IngredientService{
 	}
 
 
-
-	/*@Override
-	public Set<Ingredient> findAll() {
-        Set<Ingredient> items = new HashSet<Ingredient>();
-        repository.findAll().iterator().forEachRemaining(items::add);
-        return items;
-	}
-
 	@Override
-	public Ingredient findById(long id) {
-	    Optional<Ingredient> optionaItem = repository.findById(id);
-	    if(!optionaItem.isPresent()) {
-	    	throw new RuntimeException("Ingredient Not Found!!!");
-	    }
-	    return optionaItem.get();
-	}
-
-	@Override
-	@Transactional
-	public IngredientCommand saveCommand(IngredientCommand command) {
-		Ingredient detachItem = fromCommandConverter.convert(command);
-		Ingredient savedItem = repository.save(detachItem);
-		log.debug("Saved Ingredient Id: "+savedItem.getId());
-		return toCommandConverter.convert(savedItem);
-	}
-
-	@Override
-	@Transactional
-	public IngredientCommand findCommandById(Long id) {
-		Optional<Ingredient> optionalItem = repository.findById(id);
-		if (!optionalItem.isPresent()) {
-			throw new RuntimeException("Ingredient not found!!!");
+	public void deleteById(Long recipeId, Long ingredientId) {
+		Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+		if(!recipeOptional.isPresent()) {
+			throw new RuntimeException("Recipe id not found!!!");
 		}
-		return toCommandConverter.convert(optionalItem.get());
+		Recipe recipe = recipeOptional.get();
+		recipe.getIngredients().removeIf(ingredient -> ingredient.getId().equals(ingredientId));
+		recipeRepository.save(recipe);
 	}
-
-	@Override
-	public void deleteById(Long id) {
-		repository.deleteById(id);
-	}*/
 
 }

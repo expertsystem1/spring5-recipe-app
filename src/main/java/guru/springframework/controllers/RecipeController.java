@@ -45,7 +45,7 @@ public class RecipeController {
 	}
 	
 	@RequestMapping("/{id}/delete")
-	public String deleteItem(@PathVariable String id, Model model) {
+	public String deleteItem(@PathVariable String id) {
 		service.deleteById(new Long(id));
 		return conf.getView("", true);
 	}
