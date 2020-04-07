@@ -17,10 +17,12 @@ public class IngredientConfiguratinHelper extends ServiceCofigurationHelper{
 	public final String DELETE = "delete";
 	public final String NEW = "new";
 	public final String INDEX_PAGE = "list";
+	public final String LIST = "list";
 	public final String BASE_PATH = "recipes/ingredients/";
 	public final String RECIPE_ID = "{recipeId}";
 	public final String INGREDIENT_ID = "{id}";
 	public final String PATH_RECIPE_INGREDIENTS = "/recipes/"+RECIPE_ID+"/ingredients";
+	public final String PATH_RECIPE_INGREDIENTS_NEW = "/recipes/"+RECIPE_ID+"/ingredients/new";
 	public final String PATH_RECIPE_INGREDIENT_POST = "/recipes/"+RECIPE_ID+"/ingredient";
 	public final String PATH_RECIPE_INGREDIENT_SHOW = "/recipes/"+RECIPE_ID+"/ingredients/"+INGREDIENT_ID+"/show";
 	public final String PATH_RECIPE_INGREDIENT_UPDATE = "/recipes/"+RECIPE_ID+"/ingredients/"+INGREDIENT_ID+"/update";

@@ -65,7 +65,7 @@ public class IngredientControllerTest {
         placeHolderMap.put(conf.RECIPE_ID,"1");
         mockMvc.perform(get(conf.getDynamicView(conf.PATH_RECIPE_INGREDIENTS, placeHolderMap,false)))
                 .andExpect(status().isOk())
-                .andExpect(view().name("recipes/ingredients/list"))
+                .andExpect(view().name(conf.BASE_PATH+conf.LIST))
                 .andExpect(model().attributeExists("recipe"));
         //then
         verify(recipeService, times(1)).findCommandById(anyLong());
@@ -120,6 +120,24 @@ public class IngredientControllerTest {
 	    		.param("description", "some string"))
 	    		.andExpect(status().is3xxRedirection())
 	    		.andExpect(view().name(conf.getDynamicView(conf.PATH_RECIPE_INGREDIENT_SHOW, redirectParams, true)));	
+   }
+   
+   @Test
+   public void testNewIngredientForm() throws Exception{
+	   RecipeCommand recipeCommand = new RecipeCommand();
+	   recipeCommand.setId(1L);
+	   
+	   when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+	   when(uomService.findAll()).thenReturn(new HashSet<>());
+	   
+		Map<String,String> parameters = new HashMap<String, String>();
+		parameters.put(conf.RECIPE_ID, Long.toString(1L));
+		
+	    mockMvc.perform(get(conf.getDynamicView(conf.PATH_RECIPE_INGREDIENTS_NEW, parameters, false)))
+	   .andExpect(status().isOk())
+	   .andExpect(view().name(conf.BASE_PATH+conf.FORM_NAME))
+	   .andExpect(model().attributeExists(conf.MODEL_ATTRIBUTE_SINGLE_ITEM))
+	   .andExpect(model().attributeExists(conf.MODEL_ATTRIBUTE_ITEM_UOM_LIST));
    }
     
 }
