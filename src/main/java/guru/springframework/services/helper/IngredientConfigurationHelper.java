@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import guru.springframework.services.helper.ServiceCofigurationHelper;
 
 @Component
-public class IngredientConfiguratinHelper extends ServiceCofigurationHelper{
+public class IngredientConfigurationHelper extends ServiceCofigurationHelper{
 	
 	public final String MODEL_ATTRIBUTE_SINGLE_ITEM = "ingredient";
 	public final String MODEL_ATTRIBUTE_SINGLE_RECIPE = "recipe";

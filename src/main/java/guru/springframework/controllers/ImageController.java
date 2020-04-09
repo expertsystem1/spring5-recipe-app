@@ -1,8 +1,14 @@
 package guru.springframework.controllers;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.h2.util.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +46,19 @@ public class ImageController {
 		Map<String,String> params = new HashMap<String,String>();
 		params.put(conf.RECIPE_ID, id);
 		return conf.getDynamicView(conf.PATH_RECIPE_SHOW, params, true);
+	}
+	
+	@GetMapping("recipes/{id}/recipeimage")
+	public void getRecipeImage(@PathVariable String id, HttpServletResponse response) throws IOException {
+		Byte[] bytes = imageService.getRecipeImage(new Long(id));
+		byte[] byteArray = new byte[bytes.length];
+		int i = 0;
+		for (Byte wrappedByte : bytes) {
+			byteArray[i++] = wrappedByte;
+		}
+		response.setContentType("image/jpg");
+		InputStream is = new ByteArrayInputStream(byteArray);
+		IOUtils.copy(is, response.getOutputStream());
 	}
 	
    

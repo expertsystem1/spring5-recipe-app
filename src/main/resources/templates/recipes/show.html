@@ -44,9 +44,11 @@
 											th:text="${category.getDescription()}">cat three</li>
 									</ul>
 								</div>
+
 								<div class="col-md-6">
 									<img src="../../static/images/guacamole.jpg"
-										th:src="@{/images/guacamole.jpg}" width="100" />
+										th:src="@{'/recipes/' + ${recipe.id} + '/recipeimage'}"
+										width="100" >
 								</div>
 								<div class="col-md-1">
 									<a class="btn btn-default" href="#"

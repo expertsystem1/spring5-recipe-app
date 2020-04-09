@@ -25,7 +25,7 @@ import guru.springframework.commands.RecipeCommand;
 import guru.springframework.model.Ingredient;
 import guru.springframework.model.Recipe;
 import guru.springframework.services.RecipeService;
-import guru.springframework.services.helper.IngredientConfiguratinHelper;
+import guru.springframework.services.helper.IngredientConfigurationHelper;
 import guru.springframework.services.helper.RecipeConfigurationHelper;
 
 

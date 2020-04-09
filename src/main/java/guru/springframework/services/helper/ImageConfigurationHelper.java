@@ -10,5 +10,6 @@ public class ImageConfigurationHelper extends ServiceCofigurationHelper {
 	public final String BASE_PATH = "recipes/";
 	public final String PATH_UPLOAD_FORM ="/recipes/{recipeId}/image";
 	public final String PATH_RECIPE_SHOW ="/recipes/{recipeId}/show";
+	public final String PATH_IMAGE_RENDER ="/recipes/{recipeId}/recipeimage";
 	public final String RECIPE_ID = "{recipeId}";
 }

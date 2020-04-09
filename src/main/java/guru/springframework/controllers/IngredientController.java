@@ -17,17 +17,17 @@ import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.MeasureUnitService;
 import guru.springframework.services.RecipeService;
-import guru.springframework.services.helper.IngredientConfiguratinHelper;
+import guru.springframework.services.helper.IngredientConfigurationHelper;
 
 @Controller
 public class IngredientController {
 
 	private final RecipeService recipeService;
 	private final IngredientService ingredientService;
-	private final IngredientConfiguratinHelper conf;
+	private final IngredientConfigurationHelper conf;
 	private final MeasureUnitService uomService;
 
-	public IngredientController(RecipeService recipeService, IngredientService ingredeientService, MeasureUnitService uomService, IngredientConfiguratinHelper conf) {
+	public IngredientController(RecipeService recipeService, IngredientService ingredeientService, MeasureUnitService uomService, IngredientConfigurationHelper conf) {
 		this.recipeService = recipeService;
 		this.ingredientService = ingredeientService;
 		this.conf = conf;

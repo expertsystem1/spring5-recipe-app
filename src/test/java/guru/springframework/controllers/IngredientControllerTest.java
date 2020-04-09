@@ -28,7 +28,7 @@ import guru.springframework.commands.RecipeCommand;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.MeasureUnitService;
 import guru.springframework.services.RecipeService;
-import guru.springframework.services.helper.IngredientConfiguratinHelper;
+import guru.springframework.services.helper.IngredientConfigurationHelper;
 
 public class IngredientControllerTest {
 
@@ -43,14 +43,14 @@ public class IngredientControllerTest {
 
 	IngredientController controller;
 
-	IngredientConfiguratinHelper conf;
+	IngredientConfigurationHelper conf;
 
 	MockMvc mockMvc;
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		conf = new IngredientConfiguratinHelper();
+		conf = new IngredientConfigurationHelper();
 		controller = new IngredientController(recipeService,service,uomService, conf);
 		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 	}
