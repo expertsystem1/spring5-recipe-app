@@ -19,6 +19,12 @@ pipeline {
             }
         }
         
+        stage('Sanity check') {
+            steps {
+                input "Does the staging environment look ok?"
+            }
+        }
+        
         stage('Test Stage') {
             steps {
                    bat 'mvn test'
@@ -32,8 +38,8 @@ pipeline {
 
         always {
         //junit 'build/reports/**/*.xml'
-            mail to: 'vincenzo.lucente@finconsgroup.com'
-                 subject: "completed pipeline"
+            mail to: 'vincenzo.lucente@finconsgroup.com',
+                 subject: "completed pipeline",
                  body: "This is a message from Jenkins"
                   
             echo 'One way or another, I have finished'
