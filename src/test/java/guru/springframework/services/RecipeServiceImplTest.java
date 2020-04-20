@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.Before;
@@ -16,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 
 import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.model.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.services.impl.RecipeServiceImpl;
@@ -55,5 +57,13 @@ public class RecipeServiceImplTest {
 		recipeService.deleteById(id);
 		verify(recipeRepository, times(1)).deleteById(Mockito.anyLong());
 	}
+	
+    
+    @Test(expected = NotFoundException.class)
+    public void getRecipeByIdTestNotFound() throws Exception{
+    	Optional<Recipe> recipeOptional = Optional.empty();
+    	when(recipeRepository.findById(Mockito.anyLong())).thenReturn(recipeOptional);
+    	Recipe recipeReturned = recipeService.findById(1L);
+    }
 
 }

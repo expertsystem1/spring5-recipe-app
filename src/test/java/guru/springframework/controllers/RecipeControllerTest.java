@@ -20,12 +20,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
-import guru.springframework.model.Ingredient;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.model.Recipe;
 import guru.springframework.services.RecipeService;
-import guru.springframework.services.helper.IngredientConfigurationHelper;
 import guru.springframework.services.helper.RecipeConfigurationHelper;
 
 
@@ -106,4 +104,13 @@ public class RecipeControllerTest {
       
          verify(service,times(1)).deleteById(Mockito.anyLong());
     }
+    
+    @Test
+    public void testGetRecipeNotFound() throws Exception {
+        when(service.findById(anyLong())).thenThrow(NotFoundException.class);
+        mockMvc.perform(get("/"+conf.BASE_PATH+"1/"+conf.SHOW))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"));
+    }
+
 }
