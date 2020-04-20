@@ -32,11 +32,18 @@ pipeline {
 
         always {
         //junit 'build/reports/**/*.xml'
+            mail to: 'vincenzo.lucente@finconsgroup.com'
+                 subject: "completed pipeline"
+                 body: "This is a message from Jenkins"
+                  
             echo 'One way or another, I have finished'
             deleteDir() /* clean up our workspace */
         }
         success {
             echo 'I succeeeded!'
+            //slackSend channel: '#ops-room',
+            //          color: 'good',
+            //       message: "The pipeline ${currentBuild.fullDisplayName} completed successfully."
         }
         unstable {
             echo 'I am unstable :/'
