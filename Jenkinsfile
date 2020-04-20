@@ -13,7 +13,8 @@ pipeline {
     stages {
         stage('Compile Stage') {
             steps {
-                   echo ' Running ${env.BUILD_ID} on ${env.JENKINS_URL} with Java: ${JAVA_HOME}'
+                   echo "Custom env var: ${HELLO_WORLD}"
+                   echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL} with Java: ${JAVA_HOME}"
                    bat 'mvn clean install -DskipTests'
             }
         }
