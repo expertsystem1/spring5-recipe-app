@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'Windows 10'
-    }
+    agent any
     
     environment{
         HELLO_WORLD = 'Hello World this is a custom env variable'
