@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +50,7 @@ public class ImageControllerTest {
 	        MockitoAnnotations.initMocks(this);
 	        conf = new ImageConfigurationHelper();
 	        controller = new ImageController(imageService, recipeService,conf);
-	        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+	        mockMvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(ControllerExceptionHandler.class).build();
 	        params = new HashMap<String, String>();
 	    }
 
@@ -106,4 +107,10 @@ public class ImageControllerTest {
 	    	assertEquals(s.getBytes().length, responseBytes.length);
 	    }
 
+	    @Test
+	    public void testIdFormatException() throws Exception {
+	        mockMvc.perform(get("/recipes/asdf/recipeimage"))
+	                .andExpect(status().isBadRequest())
+	                .andExpect(view().name("400error"));
+	    }
 }
